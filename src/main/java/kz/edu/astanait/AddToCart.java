@@ -17,19 +17,17 @@ import java.util.concurrent.atomic.AtomicReference;
 @WebServlet(name = "AddToCart", urlPatterns = "/AddToCart")
 public class AddToCart extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         int id = Integer.parseInt(request.getParameter("id"));
         LinkedList<Product> items = (LinkedList<Product>) session.getAttribute("items");
-        AtomicReference<Product> selectedProduct=new AtomicReference<>();
+        AtomicReference<Product> selectedProduct = new AtomicReference<>();
         // lambda
-        items.forEach(item->{
-            if(id==item.getId()){ selectedProduct.set(item); }
+        items.forEach(item -> {
+            if (id == item.getId()) {
+                selectedProduct.set(item);
+            }
         });
-        for(Product item: items) {
+        for (Product item : items) {
             if (id == item.getId()) {
                 selectedProduct.set(item);
             }
@@ -38,13 +36,17 @@ public class AddToCart extends HttpServlet {
         Queue<Product> cart;
         if (session.getAttribute("cart") != null) {
             cart = (Queue<Product>) session.getAttribute("cart");
-        }
-        else{
-            cart=new LinkedList<>();
+        } else {
+            cart = new LinkedList<>();
         }
         cart.add(selectedProduct.get());
-        session.setAttribute("cart",cart);
+        session.setAttribute("cart", cart);
 
         response.sendRedirect("Login.jsp");
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }
